@@ -22,6 +22,14 @@
 #include "srsran/phy/gnb/gnb_dl.h"
 #include <complex.h>
 
+#define ROWS 624
+#define COLS 14
+int startSlot = 7000;
+int endSlot = 9841;
+//int endSlot = 8421;
+int flag = 1;
+
+
 static float gnb_dl_get_norm_factor(uint32_t nof_prb)
 {
   return 0.05f / sqrtf(nof_prb);
@@ -225,7 +233,8 @@ int srsran_gnb_dl_set_pdcch_config(srsran_gnb_dl_t*             q,
   return SRSRAN_SUCCESS;
 }
 
-void srsran_gnb_dl_gen_signal(srsran_gnb_dl_t* q)
+//void srsran_gnb_dl_gen_signal(srsran_gnb_dl_t* q)
+void srsran_gnb_dl_gen_signal(srsran_gnb_dl_t* q, uint32_t slotId)
 {
   if (q == NULL) {
     return;
@@ -233,13 +242,53 @@ void srsran_gnb_dl_gen_signal(srsran_gnb_dl_t* q)
 
   float norm_factor = gnb_dl_get_norm_factor(q->pdsch.carrier.nof_prb);
 
+  if(slotId > startSlot && slotId < endSlot)
+  {
+
+/*--------------------------------------------------------------------------------------------------------------------------*/
+    //printf("slotId = %d \n",slotId);
+    char fullfilename[200];
+    sprintf(fullfilename, "/home/ric/Desktop/Chapter8/V2/txFolderBin/underlay_grid%d.bin",slotId);
+    // idxFile = idxFile + 1;
+    // sprintf(fullfilename, "/home/ric/Desktop/Chapter8/V3/PolarCoding/txFolderBin/underlay_grid%d.bin",slotId);
+    FILE *fp = fopen(fullfilename,"rb");
+    float *real_part = (float *) malloc(ROWS*COLS*sizeof(float));
+    float *imag_part = (float *) malloc(ROWS*COLS*sizeof(float));
+    fread(real_part, sizeof(float), ROWS*COLS, fp);
+    fread(imag_part, sizeof(float), ROWS*COLS, fp);
+    fclose(fp);
+
+    for (uint32_t i = 0; i < q->nof_tx_antennas; i++) {
+    srsran_ofdm_t* u_h = &q->fft[i];
+    cf_t* input  = u_h->cfg.in_buffer;       
+    for (int sym = 0; sym < u_h->nof_symbols*2; sym++) {
+      cf_t* prin = input;
+      for(int j = 0; j < u_h->nof_re; j++) {
+        //for(int j = 300; j < 320; j++) {
+        //printf("z = %.2f + %.2fi\n",creal(A[sym*624 + j]),cimag(A[sym + j]));
+        prin[j] = prin[j] + (real_part[j*14+sym] + I*imag_part[j*14+sym]);
+        }
+        input += u_h->nof_re;
+      }
+    // free the memory
+    free(real_part);
+    free(imag_part);
+
+    srsran_ofdm_tx_sf(&q->fft[i]);
+    srsran_vec_sc_prod_cfc(q->fft[i].cfg.out_buffer, norm_factor, q->fft[i].cfg.out_buffer, (uint32_t)q->fft[i].sf_sz);
+
+/*--------------------------------------------------------------------------------------------------------------------------*/
+    }
+  }
+  else{
+
   for (uint32_t i = 0; i < q->nof_tx_antennas; i++) {
     srsran_ofdm_tx_sf(&q->fft[i]);
-
     srsran_vec_sc_prod_cfc(q->fft[i].cfg.out_buffer, norm_factor, q->fft[i].cfg.out_buffer, (uint32_t)q->fft[i].sf_sz);
   }
 }
 
+}
 float srsran_gnb_dl_get_maximum_signal_power_dBfs(uint32_t nof_prb)
 {
   return srsran_convert_amplitude_to_dB(gnb_dl_get_norm_factor(nof_prb)) +

@@ -72,7 +72,8 @@ SRSRAN_API void srsran_gnb_dl_free(srsran_gnb_dl_t* q);
 
 SRSRAN_API int srsran_gnb_dl_base_zero(srsran_gnb_dl_t* q);
 
-SRSRAN_API void srsran_gnb_dl_gen_signal(srsran_gnb_dl_t* q);
+//SRSRAN_API void srsran_gnb_dl_gen_signal(srsran_gnb_dl_t* q);
+SRSRAN_API void srsran_gnb_dl_gen_signal(srsran_gnb_dl_t* q, uint32_t idx);
 
 SRSRAN_API int srsran_gnb_dl_add_ssb(srsran_gnb_dl_t* q, const srsran_pbch_msg_nr_t* pbch_msg, uint32_t sf_idx);
 

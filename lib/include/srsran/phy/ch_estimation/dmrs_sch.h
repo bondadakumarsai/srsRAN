@@ -167,6 +167,7 @@ SRSRAN_API int srsran_dmrs_sch_estimate(srsran_dmrs_sch_t*           q,
                                         const srsran_sch_cfg_nr_t*   cfg,
                                         const srsran_sch_grant_nr_t* grant,
                                         const cf_t*                  sf_symbols,
-                                        srsran_chest_dl_res_t*       chest_res);
+                                        srsran_chest_dl_res_t*       chest_res,
+                                        int flagToSaveFileCh);
 
 #endif // SRSRAN_DMRS_SCH_H

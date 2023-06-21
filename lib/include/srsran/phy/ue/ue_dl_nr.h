@@ -100,7 +100,8 @@ SRSRAN_API int srsran_ue_dl_nr_set_pdcch_config(srsran_ue_dl_nr_t*           q,
 
 SRSRAN_API void srsran_ue_dl_nr_free(srsran_ue_dl_nr_t* q);
 
-SRSRAN_API void srsran_ue_dl_nr_estimate_fft(srsran_ue_dl_nr_t* q, const srsran_slot_cfg_t* slot_cfg);
+//SRSRAN_API void srsran_ue_dl_nr_estimate_fft(srsran_ue_dl_nr_t* q, const srsran_slot_cfg_t* slot_cfg);
+SRSRAN_API void srsran_ue_dl_nr_estimate_fft(srsran_ue_dl_nr_t* q, const srsran_slot_cfg_t* slot_cfg, uint32_t flagToSave);
 
 SRSRAN_API int srsran_ue_dl_nr_find_dl_dci(srsran_ue_dl_nr_t*       q,
                                            const srsran_slot_cfg_t* slot_cfg,
@@ -119,7 +120,8 @@ SRSRAN_API int srsran_ue_dl_nr_find_ul_dci(srsran_ue_dl_nr_t*       q,
 SRSRAN_API int srsran_ue_dl_nr_decode_pdsch(srsran_ue_dl_nr_t*         q,
                                             const srsran_slot_cfg_t*   slot,
                                             const srsran_sch_cfg_nr_t* cfg,
-                                            srsran_pdsch_res_nr_t*     res);
+                                            srsran_pdsch_res_nr_t*     res,
+                                            int flagToSaveFileCh);
 
 SRSRAN_API uint32_t srsran_ue_dl_nr_pdsch_info(const srsran_ue_dl_nr_t*    q,
                                                const srsran_sch_cfg_nr_t*  cfg,

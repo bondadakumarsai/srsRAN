@@ -25,6 +25,12 @@
 #define UE_DL_NR_PDCCH_CORR_DEFAULT_THR 0.5f
 #define UE_DL_NR_PDCCH_EPRE_DEFAULT_THR -80.0f
 
+int startSlotRx = 7000;
+int endSlotRx = 9841;
+//int endSlotRx = 8421;
+//int idxFileRx = 0;
+int flagRx = 1;
+
 /**
  * @brief Shifts FFT window a fraction of the cyclic prefix. Set to 0.0f for disabling.
  * @note Increases protection against inter-symbol interference in case of synchronization error in expense of computing
@@ -217,7 +223,8 @@ int srsran_ue_dl_nr_set_pdcch_config(srsran_ue_dl_nr_t*           q,
   return SRSRAN_SUCCESS;
 }
 
-void srsran_ue_dl_nr_estimate_fft(srsran_ue_dl_nr_t* q, const srsran_slot_cfg_t* slot_cfg)
+//void srsran_ue_dl_nr_estimate_fft(srsran_ue_dl_nr_t* q, const srsran_slot_cfg_t* slot_cfg)
+void srsran_ue_dl_nr_estimate_fft(srsran_ue_dl_nr_t* q, const srsran_slot_cfg_t* slot_cfg, uint32_t flagToSave)
 {
   if (q == NULL || slot_cfg == NULL) {
     return;
@@ -226,6 +233,37 @@ void srsran_ue_dl_nr_estimate_fft(srsran_ue_dl_nr_t* q, const srsran_slot_cfg_t*
   // OFDM demodulation
   for (uint32_t i = 0; i < q->nof_rx_antennas; i++) {
     srsran_ofdm_rx_sf(&q->fft[i]);
+
+    if(slot_cfg->idx == endSlotRx && flagRx)
+    {
+      //idxFileRx = startSlotRx;
+      flagRx = 0;
+    }
+
+/*-------------------------------------------------------------------------------------------------------------------------*/
+  //Saving the unequalized symbols in the bin file
+ 
+  if(flagToSave && flagRx) {
+
+  if(slot_cfg->idx > startSlotRx && slot_cfg->idx < endSlotRx)
+  {
+    //printf("slot_cfg->idx = %d, idxRx = %d \n",slot_cfg->idx,idxFileRx);
+    char fullfilename[200];
+    sprintf(fullfilename, "/home/ric/underlay_rx_folder_bin/underlay_rx%d.bin",slot_cfg->idx);
+    //idxFileRx = idxFileRx + 1;
+    // Open the file for writing
+    FILE *fp = fopen(fullfilename, "wb");
+    // printf("%p\n",fp);
+    srsran_ofdm_t* u_h = &q->fft[i];
+    cf_t* output  = u_h->cfg.out_buffer;
+    fwrite(output, sizeof(cf_t), u_h->nof_re*u_h->nof_symbols*2, fp);
+    fclose(fp);
+    
+    }
+  }
+
+/*--------------------------------------------------------------------------------------------------------------------------*/
+
   }
 
   // Estimate PDCCH channel for every configured CORESET
@@ -576,9 +614,10 @@ int srsran_ue_dl_nr_find_ul_dci(srsran_ue_dl_nr_t*       q,
 int srsran_ue_dl_nr_decode_pdsch(srsran_ue_dl_nr_t*         q,
                                  const srsran_slot_cfg_t*   slot,
                                  const srsran_sch_cfg_nr_t* cfg,
-                                 srsran_pdsch_res_nr_t*     res)
+                                 srsran_pdsch_res_nr_t*     res,
+                                 int flagToSaveFileCh)
 {
-  if (srsran_dmrs_sch_estimate(&q->dmrs_pdsch, slot, cfg, &cfg->grant, q->sf_symbols[0], &q->chest) < SRSRAN_SUCCESS) {
+  if (srsran_dmrs_sch_estimate(&q->dmrs_pdsch, slot, cfg, &cfg->grant, q->sf_symbols[0], &q->chest, flagToSaveFileCh) < SRSRAN_SUCCESS) {
     return SRSRAN_ERROR;
   }
 

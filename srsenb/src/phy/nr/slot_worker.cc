@@ -388,8 +388,9 @@ bool slot_worker::work_dl()
   }
 
   // Generate baseband signal
-  srsran_gnb_dl_gen_signal(&gnb_dl);
-
+  //srsran_gnb_dl_gen_signal(&gnb_dl);
+  srsran_gnb_dl_gen_signal(&gnb_dl,dl_slot_cfg.idx);
+  
   // Add SSB to the baseband signal
   for (const stack_interface_phy_nr::ssb_t& ssb : dl_sched_ptr->ssb) {
     if (srsran_gnb_dl_add_ssb(&gnb_dl, &ssb.pbch_msg, dl_slot_cfg.idx) < SRSRAN_SUCCESS) {

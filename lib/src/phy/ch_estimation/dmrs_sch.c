@@ -767,7 +767,8 @@ int srsran_dmrs_sch_estimate(srsran_dmrs_sch_t*           q,
                              const srsran_sch_cfg_nr_t*   cfg,
                              const srsran_sch_grant_nr_t* grant,
                              const cf_t*                  sf_symbols,
-                             srsran_chest_dl_res_t*       chest_res)
+                             srsran_chest_dl_res_t*       chest_res,
+                             int flagToSaveFileCh)
 {
   const uint32_t delta = 0;
 
@@ -997,6 +998,26 @@ int srsran_dmrs_sch_estimate(srsran_dmrs_sch_t*           q,
       }
     }
   }
+
+  /*--------------------------------------------------------------------------------------------------------------------------*/
+
+  // Saving the channel estimates in the bin file
+
+   if(flagToSaveFileCh)
+    {
+  //  if(slot->idx > startSlotCh && slot->idx < endSlotCh)
+  //    {
+      char fullfilename[100];
+      sprintf(fullfilename, "/home/ric/ch_folder_bin/ch_estim%d.bin", slot->idx);  // concatenate the file name and number
+      FILE *fp = fopen(fullfilename, "wb");
+      fwrite(ce, sizeof(cf_t), nof_re_x_symbol, fp);
+      fwrite(cfo_correction, sizeof(cf_t), grant->L, fp);
+      fclose(fp);
+    //  }
+    }
+
+/*--------------------------------------------------------------------------------------------------------------------------*/  
+
   // Set other values in the estimation result
   chest_res->nof_re = count;
 

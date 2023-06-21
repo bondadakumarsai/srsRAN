@@ -188,14 +188,16 @@ static int work_gnb_dl(srsran_gnb_dl_t*       gnb_dl,
     return SRSRAN_ERROR;
   }
 
-  srsran_gnb_dl_gen_signal(gnb_dl);
+  //srsran_gnb_dl_gen_signal(gnb_dl);
+  srsran_gnb_dl_gen_signal(gnb_dl, 0);
 
   return SRSRAN_SUCCESS;
 }
 
 static int work_ue_dl(srsran_ue_dl_nr_t* ue_dl, srsran_slot_cfg_t* slot, srsran_pdsch_res_nr_t* pdsch_res)
 {
-  srsran_ue_dl_nr_estimate_fft(ue_dl, slot);
+  //srsran_ue_dl_nr_estimate_fft(ue_dl, slot);
+  srsran_ue_dl_nr_estimate_fft(ue_dl, slot,0);
 
   srsran_dci_dl_nr_t dci_dl_rx = {};
   int                nof_found_dci =
@@ -210,7 +212,7 @@ static int work_ue_dl(srsran_ue_dl_nr_t* ue_dl, srsran_slot_cfg_t* slot, srsran_
     return SRSRAN_ERROR;
   }
 
-  if (srsran_ue_dl_nr_decode_pdsch(ue_dl, slot, &pdsch_cfg, pdsch_res) < SRSRAN_SUCCESS) {
+  if (srsran_ue_dl_nr_decode_pdsch(ue_dl, slot, &pdsch_cfg, pdsch_res, 0) < SRSRAN_SUCCESS) {
     ERROR("Error decoding");
     return SRSRAN_ERROR;
   }

@@ -175,7 +175,8 @@ static int parse_args(int argc, char** argv)
 static int work_ue_dl(srsran_ue_dl_nr_t* ue_dl, srsran_slot_cfg_t* slot)
 {
   // Run FFT
-  srsran_ue_dl_nr_estimate_fft(ue_dl, slot);
+  //srsran_ue_dl_nr_estimate_fft(ue_dl, slot);
+  srsran_ue_dl_nr_estimate_fft(ue_dl, slot, 0);
 
   // Blind search
   srsran_dci_dl_nr_t dci_dl_rx     = {};
@@ -238,7 +239,7 @@ static int work_ue_dl(srsran_ue_dl_nr_t* ue_dl, srsran_slot_cfg_t* slot)
   pdsch_res.tb[0].payload         = data;
 
   // Decode PDSCH
-  if (srsran_ue_dl_nr_decode_pdsch(ue_dl, slot, &pdsch_cfg, &pdsch_res) < SRSRAN_SUCCESS) {
+  if (srsran_ue_dl_nr_decode_pdsch(ue_dl, slot, &pdsch_cfg, &pdsch_res, 0) < SRSRAN_SUCCESS) {
     ERROR("Error decoding PDSCH search");
     return SRSRAN_ERROR;
   }

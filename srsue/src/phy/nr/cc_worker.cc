@@ -25,6 +25,12 @@
 #include "srsran/common/string_helpers.h"
 #include "srsran/srsran.h"
 
+uint32_t startSlotChWorker = 7001;
+uint32_t endSlotChWorker = 9840;
+int flagChStartWorker = 1;
+int flagToSaveFileCh = 0;
+int flagChEndWorker = 0;
+
 namespace srsue {
 namespace nr {
 
@@ -232,6 +238,15 @@ bool cc_worker::decode_pdsch_dl()
   uint32_t                   pid          = 0;
   srsran_sch_cfg_nr_t        pdsch_cfg    = {};
   srsran_harq_ack_resource_t ack_resource = {};
+
+  if(dl_slot_cfg.idx == startSlotChWorker  && flagChStartWorker)
+    {
+      //idxFileChWorker = dl_slot_cfg.idx;
+      flagChStartWorker = 0;
+      //flagChEndWorker   = 1;
+      flagToSaveFileCh  = 1;
+  }
+
   if (not phy.get_dl_pending_grant(dl_slot_cfg.idx, pdsch_cfg, ack_resource, pid)) {
     // Early return if no grant was available
     return true;
@@ -271,8 +286,11 @@ bool cc_worker::decode_pdsch_dl()
   pdsch_res.tb[0].payload             = data->msg;
   pdsch_cfg.grant.tb[0].softbuffer.rx = dl_action.tb.softbuffer;
 
+  if(dl_slot_cfg.idx > endSlotChWorker)
+    flagToSaveFileCh = 0;
+
   // Decode actual PDSCH transmission
-  if (srsran_ue_dl_nr_decode_pdsch(&ue_dl, &dl_slot_cfg, &pdsch_cfg, &pdsch_res) < SRSRAN_SUCCESS) {
+  if (srsran_ue_dl_nr_decode_pdsch(&ue_dl, &dl_slot_cfg, &pdsch_cfg, &pdsch_res,flagToSaveFileCh) < SRSRAN_SUCCESS) {
     ERROR("Error decoding PDSCH");
     return false;
   }
@@ -437,7 +455,8 @@ bool cc_worker::measure_csi()
 
     // Run FFT if not done before in this slot
     if (not estimate_fft) {
-      srsran_ue_dl_nr_estimate_fft(&ue_dl, &dl_slot_cfg);
+      //srsran_ue_dl_nr_estimate_fft(&ue_dl, &dl_slot_cfg);
+      srsran_ue_dl_nr_estimate_fft(&ue_dl, &dl_slot_cfg,0);
       estimate_fft = true;
     }
 
@@ -475,7 +494,8 @@ bool cc_worker::measure_csi()
 
     // Run FFT if not done before in this slot
     if (not estimate_fft) {
-      srsran_ue_dl_nr_estimate_fft(&ue_dl, &dl_slot_cfg);
+      //srsran_ue_dl_nr_estimate_fft(&ue_dl, &dl_slot_cfg);
+      srsran_ue_dl_nr_estimate_fft(&ue_dl, &dl_slot_cfg,0);
       estimate_fft = true;
     }
 
@@ -535,7 +555,8 @@ bool cc_worker::work_dl()
   }
 
   // Run FFT
-  srsran_ue_dl_nr_estimate_fft(&ue_dl, &dl_slot_cfg);
+  //srsran_ue_dl_nr_estimate_fft(&ue_dl, &dl_slot_cfg);
+  srsran_ue_dl_nr_estimate_fft(&ue_dl, &dl_slot_cfg, 1);
 
   // Decode PDCCH DL first
   decode_pdcch_dl();
