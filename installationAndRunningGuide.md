@@ -138,5 +138,5 @@ Configure Open5GS
 ##### Terminal 4:
     iperf3 -i 1 -c 10.45.0.3 -t 6000 -b 14M  # at gNB
 	
-### Wait for some time i.e., 5 secs, stop all processes in the terminals, and run the underlayRxProc.mlx
+### Wait for some time i.e., 15 secs, stop all processes in the terminals, and run the underlayRxProc.mlx
 	
