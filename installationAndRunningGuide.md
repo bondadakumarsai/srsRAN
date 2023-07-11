@@ -28,7 +28,9 @@
 #### Updating srsRAN config to set 5G SA to work
 	cd ../
 	cp -r config_files/srsran /root/.config/ 
-	
+ 
+#### This completes the installation of srsRAN 5G setup
+ 
 ## Core Network Installation - Open5GS
 
 ##### Update package lists and install dependencies
