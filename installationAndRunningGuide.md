@@ -1,6 +1,6 @@
 # Installation and Configuration Commands
 
-#### It is recommended to run all commands as sudo user
+#### It is recommended to run all commands as the sudo user
 	sudo -i
 
 ## srsRAN 5G SA Installation 
@@ -13,7 +13,7 @@
     cd srsRAN/
     git checkout underlayAddition
 
-#### Before building, set the underlay bin files folder path in the line 252 of file srsran/lib/src/phy/gnb/gnb_dl.c
+#### Before building, set the underlay bin files folder path in line 252 of file gnb_dl.c. The path to file is srsran/lib/src/phy/gnb. The host_name should be your user name.
     Ex: sprintf(fullfilename, "/home/host_name/Desktop/txFolderBin/underlay_grid%d.bin",slotId);  
 
 #### Build srsRAN
@@ -110,6 +110,15 @@ Configure Open5GS
 
 #### This completes the installation of Open5GS
 
+
+#### Clone the repository containing MATLAB scripts for pre-processing and post-processing of underlay signal
+
+	git clone https://github.com/bondadakumarsai/underlay.git
+	
+### Run underlayTxFileGen.mlx
+	
+	
+
 ## Running srsRAN 5G SA setup with underlay transmission and reception
 
 ##### Create a network namespace
@@ -128,3 +137,6 @@ Configure Open5GS
 
 ##### Terminal 4:
     iperf3 -i 1 -c 10.45.0.3 -t 6000 -b 14M  # at gNB
+	
+### Wait for some time i.e., 5 secs, stop all processes in the terminals, and run the underlayRxProc.mlx
+	
