@@ -1,5 +1,14 @@
 # Installation and Configuration Commands
 
+srsRAN 4G 22.04 brings 5G SA support to both srsUE and srsENB. 5G SA features can be enabled via the configuration files of both srsUE and srsENB. This guide provides instructions for installing and configuring srsRAN 4G 22.04 with 5G SA support added with underlay transmission and reception, along with the required hardware and software components.
+
+## Hardware and Software Requirements
+
+- A fast computing machine (min 16 GB RAM) with Ubuntu 20.04 or Ubuntu 22.04
+- srsRAN 4G 22.04 (or later)
+- ZeroMQ
+- Open5GS 5G Core
+
 #### It is recommended to run all commands as the sudo user
 	sudo -i
 
@@ -29,7 +38,7 @@
 	cd ../
 	cp -r config_files/srsran /root/.config/ 
  
-#### This completes the installation of srsRAN 5G setup
+### This completes the installation of srsRAN 5G setup
  
 ## Core Network Installation - Open5GS
 
@@ -108,7 +117,7 @@ Configure Open5GS
 
     sudo systemctl restart open5gs-*
 
-#### This completes the installation of Open5GS
+### This completes the installation of Open5GS
 
 
 #### Clone the repository containing MATLAB scripts for pre-processing and post-processing of underlay signal
@@ -116,8 +125,6 @@ Configure Open5GS
 	git clone https://github.com/bondadakumarsai/underlay.git
 	
 ### Run underlayTxFileGen.mlx
-	
-	
 
 ## Running srsRAN 5G SA setup with underlay transmission and reception
 
@@ -138,5 +145,5 @@ Configure Open5GS
 ##### Terminal 4:
     iperf3 -i 1 -c 10.45.0.3 -t 6000 -b 14M  # at gNB
 	
-### Wait for some time i.e., 15 secs, stop all processes in the terminals, and run the underlayRxProc.mlx
+### Wait for some time, i.e., 15 secs, stop all processes in the terminals, and run the underlayRxProc.mlx
 	
