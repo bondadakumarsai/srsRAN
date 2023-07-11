@@ -78,10 +78,16 @@ Configure Open5GS
 
 ## srsRAN 5G SA Installation 
 
+#### Required libraries
+    sudo apt-get install build-essential cmake libfftw3-dev libmbedtls-dev libboost-program-options-dev libconfig++-dev libsctp-dev
+
 ##### Clone and checkout srsRAN repository
     git clone https://github.com/bondadakumarsai/srsRAN.git
     cd srsRAN/
     git checkout underlayAddition
+
+#### Before building, set the underlay bins folder path in the line 252 of file srsran/lib/src/phy/gnb/gnb_dl.c
+    Ex: sprintf(fullfilename, "/home/host_name/Desktop/txFolderBin/underlay_grid%d.bin",slotId);  
 
 ##### Create a network namespace
     sudo ip netns add ue1
