@@ -34,7 +34,7 @@ srsRAN 4G 22.04 brings 5G SA support to both srsUE and srsENB. 5G SA features ca
 	sudo ldconfig
 	./srsran_install_configs.sh user --force
 	
-#### Updating srsRAN config to set 5G SA to work
+#### Updating srsRAN config files to set 5G SA to work
 	cd ../
 	cp -r config_files/srsran /root/.config/ 
  
@@ -102,7 +102,7 @@ Configure Open5GS
     DNN/APN: srsapn
     UE IPv4 Address: 10.45.0.3
 
-#### Updating open5GS to connect to 5G SA setup
+#### Updating open5GS config files to connect to 5G SA setup
 	cp -r config_files/open5gs /etc/ 
 
 ##### Enable IP forwarding and configure iptables rules
