@@ -1,4 +1,4 @@
-# Installation and Configuration Commands
+# Installation, Configuration and Running Commands
 
 srsRAN 4G 22.04 brings 5G SA support to both srsUE and srsENB. 5G SA features can be enabled via the configuration files of both srsUE and srsENB. This guide provides instructions for installing and configuring srsRAN 4G 22.04 with 5G SA support added with underlay transmission and reception, along with the required hardware and software components.
 
