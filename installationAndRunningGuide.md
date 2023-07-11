@@ -62,6 +62,9 @@ Configure Open5GS
     DNN/APN: srsapn
     UE IPv4 Address: 10.45.0.3
 
+#### 
+
+
 ##### Enable IP forwarding and configure iptables rules
 
     sudo sysctl -w net.ipv4.ip_forward=1
