@@ -121,7 +121,7 @@ Configure Open5GS
     sudo srsenb
 
 ##### Terminal 2:
-    sudo srsenb
+    sudo srsue
 
 ##### Terminal 3:
     sudo ip netns exec ue1 iperf3 -s  # at UE
