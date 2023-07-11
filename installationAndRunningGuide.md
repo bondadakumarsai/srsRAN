@@ -1,5 +1,34 @@
 # Installation and Configuration Commands
 
+#### It is recommended to run all commands as sudo user
+	sudo -i
+
+## srsRAN 5G SA Installation 
+
+#### Required libraries
+    sudo apt-get install build-essential cmake libfftw3-dev libmbedtls-dev libboost-program-options-dev libconfig++-dev libsctp-dev
+
+##### Clone and checkout srsRAN repository
+    git clone https://github.com/bondadakumarsai/srsRAN.git
+    cd srsRAN/
+    git checkout underlayAddition
+
+#### Before building, set the underlay bin files folder path in the line 252 of file srsran/lib/src/phy/gnb/gnb_dl.c
+    Ex: sprintf(fullfilename, "/home/host_name/Desktop/txFolderBin/underlay_grid%d.bin",slotId);  
+
+#### Build srsRAN
+	mkdir build
+	cd build
+	cmake ../
+	make -j`nproc`
+	sudo make install
+	sudo ldconfig
+	./srsran_install_configs.sh user --force
+	
+#### Updating srsRAN config to set 5G SA to work
+	cd ../
+	cp -r config_files/srsran /root/.config/ 
+	
 ## Core Network Installation - Open5GS
 
 ##### Update package lists and install dependencies
@@ -62,8 +91,8 @@ Configure Open5GS
     DNN/APN: srsapn
     UE IPv4 Address: 10.45.0.3
 
-#### 
-
+#### Updating open5GS to connect to 5G SA setup
+	cp -r config_files/open5gs /etc/ 
 
 ##### Enable IP forwarding and configure iptables rules
 
@@ -79,18 +108,7 @@ Configure Open5GS
 
 #### This completes the installation of Open5GS
 
-## srsRAN 5G SA Installation 
-
-#### Required libraries
-    sudo apt-get install build-essential cmake libfftw3-dev libmbedtls-dev libboost-program-options-dev libconfig++-dev libsctp-dev
-
-##### Clone and checkout srsRAN repository
-    git clone https://github.com/bondadakumarsai/srsRAN.git
-    cd srsRAN/
-    git checkout underlayAddition
-
-#### Before building, set the underlay bin files folder path in the line 252 of file srsran/lib/src/phy/gnb/gnb_dl.c
-    Ex: sprintf(fullfilename, "/home/host_name/Desktop/txFolderBin/underlay_grid%d.bin",slotId);  
+## Running srsRAN 5G SA setup with underlay transmission and reception
 
 ##### Create a network namespace
     sudo ip netns add ue1
@@ -108,4 +126,3 @@ Configure Open5GS
 
 ##### Terminal 4:
     iperf3 -i 1 -c 10.45.0.3 -t 6000 -b 14M  # at gNB
-
