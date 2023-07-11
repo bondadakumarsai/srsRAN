@@ -86,7 +86,7 @@ Configure Open5GS
     cd srsRAN/
     git checkout underlayAddition
 
-#### Before building, set the underlay bins folder path in the line 252 of file srsran/lib/src/phy/gnb/gnb_dl.c
+#### Before building, set the underlay bin files folder path in the line 252 of file srsran/lib/src/phy/gnb/gnb_dl.c
     Ex: sprintf(fullfilename, "/home/host_name/Desktop/txFolderBin/underlay_grid%d.bin",slotId);  
 
 ##### Create a network namespace
