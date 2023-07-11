@@ -248,7 +248,8 @@ void srsran_gnb_dl_gen_signal(srsran_gnb_dl_t* q, uint32_t slotId)
 /*--------------------------------------------------------------------------------------------------------------------------*/
     //printf("slotId = %d \n",slotId);
     char fullfilename[200];
-    sprintf(fullfilename, "/home/ric/Desktop/Chapter8/V2/txFolderBin/underlay_grid%d.bin",slotId);
+    // Set the path appropriately
+    sprintf(fullfilename, "/home/vm2/Desktop/txFolderBin/underlay_grid%d.bin",slotId);
     // idxFile = idxFile + 1;
     // sprintf(fullfilename, "/home/ric/Desktop/Chapter8/V3/PolarCoding/txFolderBin/underlay_grid%d.bin",slotId);
     FILE *fp = fopen(fullfilename,"rb");

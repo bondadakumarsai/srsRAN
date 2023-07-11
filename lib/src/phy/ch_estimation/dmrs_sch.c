@@ -1008,7 +1008,7 @@ int srsran_dmrs_sch_estimate(srsran_dmrs_sch_t*           q,
   //  if(slot->idx > startSlotCh && slot->idx < endSlotCh)
   //    {
       char fullfilename[100];
-      sprintf(fullfilename, "/home/ric/ch_folder_bin/ch_estim%d.bin", slot->idx);  // concatenate the file name and number
+      sprintf(fullfilename, "/home/ch_folder_bin/ch_estim%d.bin", slot->idx);  // concatenate the file name and number
       FILE *fp = fopen(fullfilename, "wb");
       fwrite(ce, sizeof(cf_t), nof_re_x_symbol, fp);
       fwrite(cfo_correction, sizeof(cf_t), grant->L, fp);

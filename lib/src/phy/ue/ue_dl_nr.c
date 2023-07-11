@@ -249,7 +249,7 @@ void srsran_ue_dl_nr_estimate_fft(srsran_ue_dl_nr_t* q, const srsran_slot_cfg_t*
   {
     //printf("slot_cfg->idx = %d, idxRx = %d \n",slot_cfg->idx,idxFileRx);
     char fullfilename[200];
-    sprintf(fullfilename, "/home/ric/underlay_rx_folder_bin/underlay_rx%d.bin",slot_cfg->idx);
+    sprintf(fullfilename, "/home/underlay_rx_folder_bin/underlay_rx%d.bin",slot_cfg->idx);
     //idxFileRx = idxFileRx + 1;
     // Open the file for writing
     FILE *fp = fopen(fullfilename, "wb");
