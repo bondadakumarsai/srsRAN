@@ -124,7 +124,7 @@ Configure Open5GS
 
 	git clone https://github.com/bondadakumarsai/underlay.git
 	
-### Run underlayTxFileGen.mlx
+### Run underlayTxFileGen.mlx in underlay folder
 
 ## Running srsRAN 5G SA setup with underlay transmission and reception
 
@@ -145,5 +145,5 @@ Configure Open5GS
 ##### Terminal 4:
     iperf3 -i 1 -c 10.45.0.3 -t 6000 -b 14M  # at gNB
 	
-### Wait for some time, i.e., 15 secs, stop all processes in the terminals, and run the underlayRxProc.mlx
+### Wait for some time, i.e., 15 secs, stop all processes in the terminals, and run the underlayRxProc.mlx in underlay folder
 	
