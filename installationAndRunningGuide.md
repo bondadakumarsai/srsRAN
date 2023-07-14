@@ -36,7 +36,7 @@ srsRAN 4G 22.04 brings 5G SA support to both srsUE and srsENB. 5G SA features ca
 	
 #### Updating srsRAN config files to set 5G SA to work
 	cd ../
-	cp -r config_files/srsran /root/.config/ 
+	cp -r config_files/srsran /root/.config 
  
 ### This completes the installation of srsRAN 5G setup
  
@@ -49,9 +49,7 @@ srsRAN 4G 22.04 brings 5G SA support to both srsUE and srsENB. 5G SA features ca
 
 ##### Import MongoDB GPG Key
 
-    curl -fsSL https://pgp.mongodb.com/server-6.0.asc |
-    sudo gpg -o /usr/share/keyrings/mongodb-server-6.0.gpg
-    --dearmor
+    curl -fsSL https://pgp.mongodb.com/server-6.0.asc | sudo gpg -o /usr/share/keyrings/mongodb-server-6.0.gpg --dearmor
 
 ##### Add this MongoDB repository if using Ubuntu 22.04 (Jammy)
 
@@ -90,14 +88,11 @@ Connect to [http://localhost:3000](http://localhost:3000) and login with admin a
 - Username: admin
 - Password: 1423
 
-Configure Open5GS
+Add a subscriber and configure the below fields in the subscriber info.
 
-    Mode: soft
-    Algorithm: milenage
     OPC: 63BFA50EE6523365FF14C1F45F88737D
     K: 00112233445566778899aabbccddeeff
     IMSI: 901700123456780
-    IMEI: 353490069873319
     Type: IPv4
     DNN/APN: srsapn
     UE IPv4 Address: 10.45.0.3
@@ -111,8 +106,7 @@ Configure Open5GS
     sudo iptables -t nat -A POSTROUTING -s 10.45.0.0/16 ! -o ogstun -j MASQUERADE
     sudo iptables -I INPUT -i ogstun -j ACCEPT
     sudo iptables -I INPUT -s 10.45.0.0/16 -j DROP
-    sudo iptables -I FORWARD -s 10.45.0.0/16 -d x.x.x.x/y -j DROP
-
+   
 ##### Restart Open5GS services
 
     sudo systemctl restart open5gs-*
