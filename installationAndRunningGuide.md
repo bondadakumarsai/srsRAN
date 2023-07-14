@@ -15,7 +15,7 @@ srsRAN 4G 22.04 brings 5G SA support to both srsUE and srsENB. 5G SA features ca
 ## srsRAN 5G SA Installation 
 
 #### Required libraries
-    sudo apt-get install build-essential cmake libfftw3-dev libmbedtls-dev libboost-program-options-dev libconfig++-dev libsctp-dev iperf3
+    sudo apt-get install build-essential cmake libfftw3-dev libmbedtls-dev libboost-program-options-dev libconfig++-dev libsctp-dev libzmq3-dev iperf3
 
 ##### Clone and checkout srsRAN repository
     git clone https://github.com/bondadakumarsai/srsRAN.git
