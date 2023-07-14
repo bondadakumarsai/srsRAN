@@ -123,6 +123,8 @@ Configure Open5GS
 #### Clone the repository containing MATLAB scripts for pre-processing and post-processing of underlay signal
 
 	git clone https://github.com/bondadakumarsai/underlay.git
+ 	sudo mkdir /home/ch_folder_bin
+  	sudo mkdir /home/underlay_rx_folder_bin
 	
 ### Run underlayTxFileGen.mlx in underlay folder
 
