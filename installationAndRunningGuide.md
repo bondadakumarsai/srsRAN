@@ -25,6 +25,8 @@ srsRAN 4G 22.04 brings 5G SA support to both srsUE and srsENB. 5G SA features ca
 #### Before building, set the underlay bin files folder path in line 252 of file gnb_dl.c. The path to file is srsran/lib/src/phy/gnb. The host_name should be your user name.
     Ex: sprintf(fullfilename, "/home/host_name/Desktop/txFolderBin/underlay_grid%d.bin",slotId);  
 
+#### Note: Underlay Addition at gNodeB- File: srsran/lib/src/phy/gnb/gnb_dl.c, Underlay Extraction at UE- File: srsran/lib/src/phy/ue/ue_dl_nr.c    
+
 #### Build srsRAN
 	mkdir build
 	cd build
