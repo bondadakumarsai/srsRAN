@@ -30,6 +30,8 @@ int endSlotRx = 9841;
 //int endSlotRx = 8421;
 //int idxFileRx = 0;
 int flagRx = 1;
+int sysFrameCounter = 1;
+int flagC = 1;
 
 /**
  * @brief Shifts FFT window a fraction of the cyclic prefix. Set to 0.0f for disabling.
@@ -234,6 +236,17 @@ void srsran_ue_dl_nr_estimate_fft(srsran_ue_dl_nr_t* q, const srsran_slot_cfg_t*
   for (uint32_t i = 0; i < q->nof_rx_antennas; i++) {
     srsran_ofdm_rx_sf(&q->fft[i]);
 
+
+    if(slot_cfg->idx == startSlotRx && ~flagRx && flagC){
+    sysFrameCounter +=1;
+    if(sysFrameCounter == 4){
+      printf("Hello from UE DL NR\n");
+      flagRx = 1;
+      flagC   = 0;
+    }
+      
+  }
+
     if(slot_cfg->idx == endSlotRx && flagRx)
     {
       //idxFileRx = startSlotRx;
@@ -249,7 +262,8 @@ void srsran_ue_dl_nr_estimate_fft(srsran_ue_dl_nr_t* q, const srsran_slot_cfg_t*
   {
     //printf("slot_cfg->idx = %d, idxRx = %d \n",slot_cfg->idx,idxFileRx);
     char fullfilename[200];
-    sprintf(fullfilename, "/home/underlay_rx_folder_bin/underlay_rx%d.bin",slot_cfg->idx);
+    //sprintf(fullfilename, "/home/underlay_rx_folder_bin/underlay_rx%d.bin",slot_cfg->idx);
+    sprintf(fullfilename, "/mnt/ramdisk/underlay_rx_folder_bin/underlay_rx%d.bin",slot_cfg->idx);
     //idxFileRx = idxFileRx + 1;
     // Open the file for writing
     FILE *fp = fopen(fullfilename, "wb");

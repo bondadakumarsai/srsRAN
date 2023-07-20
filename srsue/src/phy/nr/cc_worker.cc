@@ -30,6 +30,7 @@ uint32_t endSlotChWorker = 9840;
 int flagChStartWorker = 1;
 int flagToSaveFileCh = 0;
 int flagChEndWorker = 0;
+int sysFrameCounter1 = 1;
 
 namespace srsue {
 namespace nr {
@@ -239,13 +240,26 @@ bool cc_worker::decode_pdsch_dl()
   srsran_sch_cfg_nr_t        pdsch_cfg    = {};
   srsran_harq_ack_resource_t ack_resource = {};
 
+
+  if(dl_slot_cfg.idx ==  startSlotChWorker && ~flagToSaveFileCh && flagChStartWorker){
+    sysFrameCounter1 +=1;
+    if(sysFrameCounter1 == 4){
+      printf("Hello from CC worker\n");
+      flagToSaveFileCh = 1;
+      flagChStartWorker   = 0;
+    }
+      
+  }
+  
+  
+  /*
   if(dl_slot_cfg.idx == startSlotChWorker  && flagChStartWorker)
     {
       //idxFileChWorker = dl_slot_cfg.idx;
       flagChStartWorker = 0;
       //flagChEndWorker   = 1;
       flagToSaveFileCh  = 1;
-  }
+  }*/
 
   if (not phy.get_dl_pending_grant(dl_slot_cfg.idx, pdsch_cfg, ack_resource, pid)) {
     // Early return if no grant was available
