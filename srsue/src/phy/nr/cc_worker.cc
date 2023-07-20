@@ -243,6 +243,7 @@ bool cc_worker::decode_pdsch_dl()
 
   if(dl_slot_cfg.idx ==  startSlotChWorker && ~flagToSaveFileCh && flagChStartWorker){
     sysFrameCounter1 +=1;
+         //printf("dl_slot_cfg.idx = %d, sysFrameCounter1=%d\n",dl_slot_cfg.idx,sysFrameCounter1);
     if(sysFrameCounter1 == 4){
       printf("Hello from CC worker\n");
       flagToSaveFileCh = 1;

@@ -29,7 +29,7 @@ int startSlotRx = 7000;
 int endSlotRx = 9841;
 //int endSlotRx = 8421;
 //int idxFileRx = 0;
-int flagRx = 1;
+int flagRx = 0;
 int sysFrameCounter = 1;
 int flagC = 1;
 
@@ -236,9 +236,13 @@ void srsran_ue_dl_nr_estimate_fft(srsran_ue_dl_nr_t* q, const srsran_slot_cfg_t*
   for (uint32_t i = 0; i < q->nof_rx_antennas; i++) {
     srsran_ofdm_rx_sf(&q->fft[i]);
 
-
+/*-------------------------------------------------------------------------------------------------------------------------*/
+  //Saving the unequalized symbols in the bin file
+ 
+  if(flagToSave) {
     if(slot_cfg->idx == startSlotRx && ~flagRx && flagC){
     sysFrameCounter +=1;
+    //printf("slot_cfg->idx = %d, sysFrameCounter=%d flagRx=%d\n",slot_cfg->idx,sysFrameCounter,flagRx);
     if(sysFrameCounter == 4){
       printf("Hello from UE DL NR\n");
       flagRx = 1;
@@ -252,17 +256,14 @@ void srsran_ue_dl_nr_estimate_fft(srsran_ue_dl_nr_t* q, const srsran_slot_cfg_t*
       //idxFileRx = startSlotRx;
       flagRx = 0;
     }
-
-/*-------------------------------------------------------------------------------------------------------------------------*/
-  //Saving the unequalized symbols in the bin file
- 
-  if(flagToSave && flagRx) {
-
+   
+  if(flagRx){
   if(slot_cfg->idx > startSlotRx && slot_cfg->idx < endSlotRx)
+  //if(slot_cfg->idx > startSlotRx && slot_cfg->idx < 7040)
   {
-    //printf("slot_cfg->idx = %d, idxRx = %d \n",slot_cfg->idx,idxFileRx);
+    //printf("slot_cfg->idx = %d, sysFrameCounter=%d\n",slot_cfg->idx,sysFrameCounter);
     char fullfilename[200];
-    //sprintf(fullfilename, "/home/underlay_rx_folder_bin/underlay_rx%d.bin",slot_cfg->idx);
+    //sprintf(fullfilename, "/home/ric/underlay_rx_folder_bin/underlay_rx%d.bin",slot_cfg->idx);
     sprintf(fullfilename, "/mnt/ramdisk/underlay_rx_folder_bin/underlay_rx%d.bin",slot_cfg->idx);
     //idxFileRx = idxFileRx + 1;
     // Open the file for writing
@@ -274,6 +275,7 @@ void srsran_ue_dl_nr_estimate_fft(srsran_ue_dl_nr_t* q, const srsran_slot_cfg_t*
     fclose(fp);
     
     }
+   }
   }
 
 /*--------------------------------------------------------------------------------------------------------------------------*/
