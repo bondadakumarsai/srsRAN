@@ -25,13 +25,21 @@
 #define UE_DL_NR_PDCCH_CORR_DEFAULT_THR 0.5f
 #define UE_DL_NR_PDCCH_EPRE_DEFAULT_THR -80.0f
 
-int startSlotRx = 7000;
-int endSlotRx = 9841;
+
+
+// no polar coding
+//int startSlotRx = 7000;
+//int endSlotRx = 9841;
+// polar coding
+//int startSlotRx = 7000;
 //int endSlotRx = 8421;
-//int idxFileRx = 0;
-int flagRx = 0;
+// larger Image (no polar coding)
+int startSlotRx = 1000;
+int endSlotRx = 9341;
+
+// int flagRx = 0;
 int sysFrameCounter = 1;
-int flagC = 1;
+// int flagC = 1;
 
 /**
  * @brief Shifts FFT window a fraction of the cyclic prefix. Set to 0.0f for disabling.
@@ -240,43 +248,44 @@ void srsran_ue_dl_nr_estimate_fft(srsran_ue_dl_nr_t* q, const srsran_slot_cfg_t*
   //Saving the unequalized symbols in the bin file
  
   if(flagToSave) {
-    if(slot_cfg->idx == startSlotRx && ~flagRx && flagC){
-    sysFrameCounter +=1;
-    //printf("slot_cfg->idx = %d, sysFrameCounter=%d flagRx=%d\n",slot_cfg->idx,sysFrameCounter,flagRx);
-    if(sysFrameCounter == 4){
-      printf("Hello from UE DL NR\n");
-      flagRx = 1;
-      flagC   = 0;
-    }
+  //   if(slot_cfg->idx == startSlotRx && ~flagRx && flagC){
+  //   sysFrameCounter +=1;
+  //   //printf("slot_cfg->idx = %d, sysFrameCounter=%d flagRx=%d\n",slot_cfg->idx,sysFrameCounter,flagRx);
+  //   if(sysFrameCounter == 4){
+  //     printf("Hello from UE DL NR\n");
+  //     flagRx = 1;
+  //     flagC   = 0;
+  //   }
       
-  }
+  // }
 
-    if(slot_cfg->idx == endSlotRx && flagRx)
-    {
-      //idxFileRx = startSlotRx;
-      flagRx = 0;
-    }
-   
-  if(flagRx){
-  if(slot_cfg->idx > startSlotRx && slot_cfg->idx < endSlotRx)
-  //if(slot_cfg->idx > startSlotRx && slot_cfg->idx < 7040)
-  {
-    //printf("slot_cfg->idx = %d, sysFrameCounter=%d\n",slot_cfg->idx,sysFrameCounter);
-    char fullfilename[200];
-    //sprintf(fullfilename, "/home/ric/underlay_rx_folder_bin/underlay_rx%d.bin",slot_cfg->idx);
-    sprintf(fullfilename, "/mnt/ramdisk/underlay_rx_folder_bin/underlay_rx%d.bin",slot_cfg->idx);
-    //idxFileRx = idxFileRx + 1;
-    // Open the file for writing
-    FILE *fp = fopen(fullfilename, "wb");
-    // printf("%p\n",fp);
-    srsran_ofdm_t* u_h = &q->fft[i];
-    cf_t* output  = u_h->cfg.out_buffer;
-    fwrite(output, sizeof(cf_t), u_h->nof_re*u_h->nof_symbols*2, fp);
-    fclose(fp);
+    // if(slot_cfg->idx == endSlotRx && flagRx)
+    // {
+    //   //idxFileRx = startSlotRx;
+    //   flagRx = 0;
+    // }
+
+    if(slot_cfg->idx == startSlotRx)
+      sysFrameCounter +=1;
+
+    if(sysFrameCounter >= 4 && sysFrameCounter <= 6){
+      //printf("Collecting Unequalized RX Samples (after FFT), %d Capture\n",sysFrameCounter-1);
+      if(slot_cfg->idx > startSlotRx && slot_cfg->idx < endSlotRx)
+      {
+      //printf("slot_cfg->idx = %d, sysFrameCounter=%d\n",slot_cfg->idx,sysFrameCounter);
+      char fullfilename[200];
+      sprintf(fullfilename, "/home/ric/underlay_rx_folder_bin/underlay_rx%d_%d.bin",sysFrameCounter,slot_cfg->idx);
+      //sprintf(fullfilename, "/mnt/ramdisk/underlay_rx_folder_bin/underlay_rx%d.bin",slot_cfg->idx);
+      // Open the file for writing
+      FILE *fp = fopen(fullfilename, "wb");
+      srsran_ofdm_t* u_h = &q->fft[i];
+      cf_t* output  = u_h->cfg.out_buffer;
+      fwrite(output, sizeof(cf_t), u_h->nof_re*u_h->nof_symbols*2, fp);
+      fclose(fp);
     
+      }
     }
-   }
-  }
+    }  
 
 /*--------------------------------------------------------------------------------------------------------------------------*/
 
@@ -631,9 +640,10 @@ int srsran_ue_dl_nr_decode_pdsch(srsran_ue_dl_nr_t*         q,
                                  const srsran_slot_cfg_t*   slot,
                                  const srsran_sch_cfg_nr_t* cfg,
                                  srsran_pdsch_res_nr_t*     res,
-                                 int flagToSaveFileCh)
+                                 int flagToSaveFileCh,
+                                 int sysFrameCounter1)
 {
-  if (srsran_dmrs_sch_estimate(&q->dmrs_pdsch, slot, cfg, &cfg->grant, q->sf_symbols[0], &q->chest, flagToSaveFileCh) < SRSRAN_SUCCESS) {
+  if (srsran_dmrs_sch_estimate(&q->dmrs_pdsch, slot, cfg, &cfg->grant, q->sf_symbols[0], &q->chest, flagToSaveFileCh,sysFrameCounter1) < SRSRAN_SUCCESS) {
     return SRSRAN_ERROR;
   }
 

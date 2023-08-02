@@ -185,7 +185,7 @@ int srsran_gnb_ul_get_pusch(srsran_gnb_ul_t*             q,
     return SRSRAN_ERROR_INVALID_INPUTS;
   }
 
-  if (srsran_dmrs_sch_estimate(&q->dmrs, slot_cfg, cfg, grant, q->sf_symbols[0], &q->chest_pusch, 0) < SRSRAN_SUCCESS) {
+  if (srsran_dmrs_sch_estimate(&q->dmrs, slot_cfg, cfg, grant, q->sf_symbols[0], &q->chest_pusch, 0,0) < SRSRAN_SUCCESS) {
     return SRSRAN_ERROR;
   }
 

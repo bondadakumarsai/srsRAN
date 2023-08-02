@@ -25,8 +25,21 @@
 #include "srsran/common/string_helpers.h"
 #include "srsran/srsran.h"
 
-uint32_t startSlotChWorker = 7001;
-uint32_t endSlotChWorker = 9840;
+
+
+// no polar coding
+//uint32_t startSlotChWorker = 7000;
+//uint32_t endSlotChWorker = 9841;
+// polar coding
+//uint32_t startSlotChWorker = 7000;
+//uint32_t endSlotChWorker = 8421;
+// larger Image (no polar coding)
+uint32_t startSlotChWorker = 1001;
+uint32_t endSlotChWorker = 9340;
+
+// uint32_t startSlotChWorker = 7001;
+// uint32_t endSlotChWorker = 9840;
+// uint32_t endSlotChWorker = 8420;
 int flagChStartWorker = 1;
 int flagToSaveFileCh = 0;
 int flagChEndWorker = 0;
@@ -241,17 +254,32 @@ bool cc_worker::decode_pdsch_dl()
   srsran_harq_ack_resource_t ack_resource = {};
 
 
-  if(dl_slot_cfg.idx ==  startSlotChWorker && ~flagToSaveFileCh && flagChStartWorker){
-    sysFrameCounter1 +=1;
-         //printf("dl_slot_cfg.idx = %d, sysFrameCounter1=%d\n",dl_slot_cfg.idx,sysFrameCounter1);
-    if(sysFrameCounter1 == 4){
-      printf("Hello from CC worker\n");
-      flagToSaveFileCh = 1;
-      flagChStartWorker   = 0;
-    }
+  // if(dl_slot_cfg.idx ==  startSlotChWorker && ~flagToSaveFileCh && flagChStartWorker){
+  //   sysFrameCounter1 +=1;
+  //        //printf("dl_slot_cfg.idx = %d, sysFrameCounter1=%d\n",dl_slot_cfg.idx,sysFrameCounter1);
+  //   if(sysFrameCounter1 == 4){
+  //     printf("Hello from CC worker\n");
+  //     flagToSaveFileCh = 1;
+  //     flagChStartWorker   = 0;
+  //   }
       
-  }
-  
+  // }
+
+
+    if(dl_slot_cfg.idx ==  startSlotChWorker){
+      sysFrameCounter1 +=1;  
+    }
+
+    if(sysFrameCounter1 >= 4 && sysFrameCounter1 <= 6){
+      //printf("Hello from CC worker\n");
+      flagToSaveFileCh = 1;
+    }
+
+
+    if(sysFrameCounter1>6){
+      //printf("Hello from CC worker\n");
+      flagToSaveFileCh = 0;
+    }
   
   /*
   if(dl_slot_cfg.idx == startSlotChWorker  && flagChStartWorker)
@@ -301,11 +329,8 @@ bool cc_worker::decode_pdsch_dl()
   pdsch_res.tb[0].payload             = data->msg;
   pdsch_cfg.grant.tb[0].softbuffer.rx = dl_action.tb.softbuffer;
 
-  if(dl_slot_cfg.idx > endSlotChWorker)
-    flagToSaveFileCh = 0;
-
   // Decode actual PDSCH transmission
-  if (srsran_ue_dl_nr_decode_pdsch(&ue_dl, &dl_slot_cfg, &pdsch_cfg, &pdsch_res,flagToSaveFileCh) < SRSRAN_SUCCESS) {
+  if (srsran_ue_dl_nr_decode_pdsch(&ue_dl, &dl_slot_cfg, &pdsch_cfg, &pdsch_res,flagToSaveFileCh,sysFrameCounter1) < SRSRAN_SUCCESS) {
     ERROR("Error decoding PDSCH");
     return false;
   }

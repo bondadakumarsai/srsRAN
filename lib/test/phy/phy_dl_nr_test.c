@@ -212,7 +212,7 @@ static int work_ue_dl(srsran_ue_dl_nr_t* ue_dl, srsran_slot_cfg_t* slot, srsran_
     return SRSRAN_ERROR;
   }
 
-  if (srsran_ue_dl_nr_decode_pdsch(ue_dl, slot, &pdsch_cfg, pdsch_res, 0) < SRSRAN_SUCCESS) {
+  if (srsran_ue_dl_nr_decode_pdsch(ue_dl, slot, &pdsch_cfg, pdsch_res, 0,0) < SRSRAN_SUCCESS) {
     ERROR("Error decoding");
     return SRSRAN_ERROR;
   }

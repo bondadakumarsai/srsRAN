@@ -193,7 +193,7 @@ static int parse_args(all_args_t* args, int argc, char* argv[])
     ("log.stack_level", bpo::value<string>(&args->stack.log.stack_level), "Stack log level")
     ("log.stack_hex_limit", bpo::value<int>(&args->stack.log.stack_hex_limit), "Stack log hex dump limit")
 
-    ("log.all_level", bpo::value<string>(&args->log.all_level)->default_value("info"), "ALL log level")
+    ("log.all_level", bpo::value<string>(&args->log.all_level)->default_value("none"), "ALL log level")
     ("log.all_hex_limit", bpo::value<int>(&args->log.all_hex_limit)->default_value(32), "ALL log hex dump limit")
 
     ("log.filename", bpo::value<string>(&args->log.filename)->default_value("/tmp/ue.log"), "Log filename")

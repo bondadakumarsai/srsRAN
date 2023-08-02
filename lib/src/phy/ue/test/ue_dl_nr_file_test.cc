@@ -239,7 +239,7 @@ static int work_ue_dl(srsran_ue_dl_nr_t* ue_dl, srsran_slot_cfg_t* slot)
   pdsch_res.tb[0].payload         = data;
 
   // Decode PDSCH
-  if (srsran_ue_dl_nr_decode_pdsch(ue_dl, slot, &pdsch_cfg, &pdsch_res, 0) < SRSRAN_SUCCESS) {
+  if (srsran_ue_dl_nr_decode_pdsch(ue_dl, slot, &pdsch_cfg, &pdsch_res, 0, 0) < SRSRAN_SUCCESS) {
     ERROR("Error decoding PDSCH search");
     return SRSRAN_ERROR;
   }

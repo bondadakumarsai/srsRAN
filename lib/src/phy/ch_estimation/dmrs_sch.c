@@ -53,6 +53,9 @@
  */
 #define DMRS_SCH_MAX_NOF_PRB 106
 
+int startSlotCh = 1000;
+int endSlotCh = 9341;
+
 int srsran_dmrs_sch_cfg_to_str(const srsran_dmrs_sch_cfg_t* cfg, char* msg, uint32_t max_len)
 {
   int type           = (int)cfg->type + 1;
@@ -768,7 +771,8 @@ int srsran_dmrs_sch_estimate(srsran_dmrs_sch_t*           q,
                              const srsran_sch_grant_nr_t* grant,
                              const cf_t*                  sf_symbols,
                              srsran_chest_dl_res_t*       chest_res,
-                             int flagToSaveFileCh)
+                             int flagToSaveFileCh, 
+                             int sysFrameCounter1)
 {
   const uint32_t delta = 0;
 
@@ -1005,16 +1009,16 @@ int srsran_dmrs_sch_estimate(srsran_dmrs_sch_t*           q,
 
    if(flagToSaveFileCh)
     {
-  //  if(slot->idx > startSlotCh && slot->idx < endSlotCh)
-  //    {
+   if(slot->idx > startSlotCh && slot->idx < endSlotCh)
+     {
       char fullfilename[100];
-      //sprintf(fullfilename, "/home/ric/ch_folder_bin/ch_estim%d.bin", slot->idx);  // concatenate the file name and number
-      sprintf(fullfilename, "/mnt/ramdisk/ch_folder_bin/ch_estim%d.bin", slot->idx);  // concatenate the file name and number
+      sprintf(fullfilename, "/home/ric/ch_folder_bin/ch_estim%d_%d.bin",sysFrameCounter1, slot->idx);  // concatenate the file name and number
+      //sprintf(fullfilename, "/mnt/ramdisk/ch_folder_bin/ch_estim%d.bin", slot->idx);  // concatenate the file name and number
       FILE *fp = fopen(fullfilename, "wb");
       fwrite(ce, sizeof(cf_t), nof_re_x_symbol, fp);
       fwrite(cfo_correction, sizeof(cf_t), grant->L, fp);
       fclose(fp);
-    //  }
+     }
     }
 
 /*--------------------------------------------------------------------------------------------------------------------------*/  

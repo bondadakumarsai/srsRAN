@@ -224,7 +224,7 @@ static int run_test(srsran_dmrs_sch_t*           dmrs_pdsch,
   for (slot_cfg.idx = 0; slot_cfg.idx < SRSRAN_NSLOTS_PER_FRAME_NR(dmrs_pdsch->carrier.scs); slot_cfg.idx++) {
     TESTASSERT(srsran_dmrs_sch_put_sf(dmrs_pdsch, &slot_cfg, pdsch_cfg, grant, sf_symbols) == SRSRAN_SUCCESS);
 
-    TESTASSERT(srsran_dmrs_sch_estimate(dmrs_pdsch, &slot_cfg, pdsch_cfg, grant, sf_symbols, chest_res, 0) ==
+    TESTASSERT(srsran_dmrs_sch_estimate(dmrs_pdsch, &slot_cfg, pdsch_cfg, grant, sf_symbols, chest_res, 0,0) ==
                SRSRAN_SUCCESS);
 
     float mse = 0.0f;
